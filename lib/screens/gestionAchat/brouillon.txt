@@ -1,0 +1,75 @@
+FutureBuilder(
+        future: articleList,
+        builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DetailsArticle(snapshot.data![index])));
+                  },
+                  child: Card(
+                    margin: EdgeInsets.all(5),
+                    elevation: 5,
+                    child: Row(
+                      children: [
+                        Hero(
+                          tag: "article" +
+                              snapshot.data![index]["categorie"].toString(),
+                          child: CachedNetworkImage(
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(
+                                    strokeWidth: 1,
+                                    color: Colors.yellow,
+                                  ),
+                              imageUrl: snapshot.data![index]["image"],
+                              width: 100,
+                              height: 100),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                snapshot.data![index]["categorie"],
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green[900]),
+                              ),
+                              Text(
+                                '${snapshot.data![index]["prix"]}',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                snapshot.data![index]["localisation_vendeur"],
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            return Container(
+              child: Text("No Data!"),
+            );
+          }
+        },
+      ),
